@@ -86,7 +86,7 @@ def main():
     while True:
         try:
             for host_to_test in hosts:
-                print()
+                # print()
                 rtt_msecs = ping_endpoint(host_to_test.hostname)
 
                 # print(
@@ -112,7 +112,7 @@ def main():
             print('Error : ' + e.__str__())
             print('sleeping...')
             # beep.warning(num_beeps=2, sound=3)
-            time.sleep(60)     # wait 3 mins
+            time.sleep(60)     # wait 1 mins
             continue
 
 
