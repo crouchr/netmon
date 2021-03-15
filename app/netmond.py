@@ -68,16 +68,19 @@ def main():
     host_x = host.Host('dsl_router', '192.168.1.1')
     hosts.append(host_x)
 
+    host_x = host.Host('j1900', '192.168.1.6')
+    hosts.append(host_x)
+
     host_x = host.Host('netgear', '192.168.1.8')
+    hosts.append(host_x)
+
+    host_x = host.Host('pi', '192.168.1.12')
     hosts.append(host_x)
 
     host_x = host.Host('web_server', '192.168.1.102')
     hosts.append(host_x)
 
     host_x = host.Host('registry', '192.168.1.109')
-    hosts.append(host_x)
-
-    host_x = host.Host('pi', '192.168.1.12')
     hosts.append(host_x)
 
     # host_x = host.Host('blackhole', '111.111.111.111')
