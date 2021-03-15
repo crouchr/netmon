@@ -22,7 +22,7 @@ def ping_endpoint(dest_ip):
     """
 
     try:
-        rtt_msecs = -1.0
+        rtt_msecs = -5.0
 
         # flush ARP caches etc.
         cmd_str = 'ping -c 2 ' + dest_ip
@@ -36,7 +36,7 @@ def ping_endpoint(dest_ip):
         lines = console_output.split('\n')
         for line in lines:
             if '100% packet loss' in line:
-                rtt_msecs = -1.0
+                rtt_msecs = -5.0
             if '64 bytes from ' in line:
                 parts = line.split(' ')
                 time = parts[6]
@@ -46,7 +46,7 @@ def ping_endpoint(dest_ip):
 
     except Exception as e:
         print('ping_endpoint() : Error=' + e.__str__())
-        return -1.0
+        return -5.0
 
 
 def main():
