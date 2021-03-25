@@ -1,6 +1,18 @@
 netmon
 ======
 
+
+REQS
+----
+- eliminate OpsView
+- per second rtt and packet loss
+- subnet to subnet
+- use EC2
+- generate alarms
+- log into grafana
+- configuration via Chef 
+
+
 todo
 ====
 
@@ -46,3 +58,4 @@ i.e. need to get the Grafan a taggin correct
 
 later tests = DNS, http, SIP options
 
+he feeds JSON file into a telegraf-based container
