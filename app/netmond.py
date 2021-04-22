@@ -50,9 +50,6 @@ def main():
     host_x = host.Host('registry', '192.168.1.109')
     hosts.append(host_x)
 
-    # host_x = host.Host('blackhole', '111.111.111.111')
-    # hosts.append(host_x)
-
     if stage == 'DEV':
         sudo = True
     else:
@@ -61,13 +58,7 @@ def main():
     while True:
         try:
             for host_to_test in hosts:
-                # print()
                 ping_measurements = ping.ping_endpoint(host_to_test.hostname, sudo)
-
-                # print(
-                #     'dest=' + host_to_test.hostname + \
-                #     ', rtt_msecs=' + rtt_msecs.__str__()
-                #     )
 
                 # Construct the metric bundle
                 metric_name = 'netmon_' + probe_name + '_to_' + host_to_test.name
