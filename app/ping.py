@@ -55,9 +55,11 @@ def ping_endpoint(dest_ip):
         #cmd_str = 'ping ' + dest_ip + ' -c 5 '
         #run_sh_cmd.run_sh_cmd(cmd_str)
 
-        # the real one !
-        # cmd_str = 'sudo /usr/sbin/fping ' + dest_ip + ' -c 10 -p 100 -o -q -t 500'
+        # use this when running in Pycharm (as crouchr)
         cmd_str = 'sudo /usr/sbin/fping ' + dest_ip + ' -c 10 -p 100 -o -q -t 500'
+
+        # no sudo needed when running in a container
+        cmd_str = 'fping ' + dest_ip + ' -c 10 -p 100 -o -q -t 500'
         console_output = run_sh_cmd.run_sh_cmd(cmd_str)
 
         # regular ping : 64 bytes from 8.8.8.8: icmp_seq=1 ttl=117 time=12.6 ms
