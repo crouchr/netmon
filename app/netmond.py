@@ -12,6 +12,7 @@ def main():
     hosts = []
     version = get_env.get_version()
     verbose = get_env.get_verbose()
+    stage = get_env.get_stage()
 
     telegraf_endpoint_host = get_env_app.get_telegraf_endpoint()    # can be read from ENV
     poll_secs = get_env_app.get_poll_secs()
@@ -19,6 +20,7 @@ def main():
 
     print('netmond started, version=' + version)
     print('verbose=' + verbose.__str__())
+    print('stage=' + stage.__str__())
     print('telegraf_endpoint_host=' + telegraf_endpoint_host)
     print('poll_secs=' + poll_secs.__str__())
     print('probe_name=' + probe_name.__str__())
@@ -51,11 +53,16 @@ def main():
     # host_x = host.Host('blackhole', '111.111.111.111')
     # hosts.append(host_x)
 
+    if stage == 'DEV':
+        sudo = True
+    else:
+        sudo = False
+
     while True:
         try:
             for host_to_test in hosts:
                 # print()
-                ping_measurements = ping.ping_endpoint(host_to_test.hostname)
+                ping_measurements = ping.ping_endpoint(host_to_test.hostname, sudo)
 
                 # print(
                 #     'dest=' + host_to_test.hostname + \
