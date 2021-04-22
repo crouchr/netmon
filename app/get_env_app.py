@@ -18,3 +18,12 @@ def get_telegraf_endpoint():
         telegraf_endpoint = '192.168.1.6'
 
     return telegraf_endpoint
+
+
+def get_probe_name():
+    if 'PROBE_NAME' in os.environ:
+        probe_name = os.environ['PROBE_NAME']
+    else:
+        probe_name = 'kube'
+
+    return probe_name
