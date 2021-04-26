@@ -38,7 +38,7 @@ def main():
     destinations.add_host(host.Host('dsl_router', '192.168.1.1', False))
     destinations.add_host(host.Host('google_dns', '8.8.8.8', False))
     destinations.add_host(host.Host('netgear', '192.168.1.8', False))
-    destinations.add_host(host.Host('pi', '192.168.1.12', False))   # add iperf to startup script
+    destinations.add_host(host.Host('pi', '192.168.1.12', True))    # add iperf to startup script
     destinations.add_host(host.Host('web_server', '192.168.1.102', False))
     destinations.add_host(host.Host('registry', '192.168.1.109', False))
 
