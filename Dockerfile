@@ -22,4 +22,5 @@ WORKDIR /app
 #RUN echo date > /tmp/built.txt
 
 # run Python unbuffered so the logs are flushed
-CMD ["python3", "-u", "netmond.py"]
+#CMD ["python3", "-u", "netmond.py"]
+CMD ["tail", "-f", "/dev/null"]
