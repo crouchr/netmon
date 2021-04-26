@@ -17,7 +17,14 @@ def run_sh_cmd(cmd_str):
     stdout_, stderr_ = p.communicate()
     p.wait()
 
-    console_output = stderr_.decode().rstrip('\n')
+    stdout_ = stdout_.decode('ASCII')
+    stderr_ = stderr_.decode('ASCII')
+    if len(stdout_) > 0:
+        console_output = stdout_.rstrip('\n')
+    else:
+        console_output = stderr_.rstrip('\n')
+
+    #console_output = stderr_.decode().rstrip('\n')
     # console_error = stderr_.decode()
     # print(console_output)
     # print(console_error)

@@ -20,6 +20,7 @@ def get_telegraf_endpoint():
     return telegraf_endpoint
 
 
+# The name of the host sending the traffic
 def get_probe_name():
     if 'PROBE_NAME' in os.environ:
         probe_name = os.environ['PROBE_NAME']

@@ -4,7 +4,11 @@ from pprint import pprint
 import get_env
 import get_env_app
 import send_metrics_to_telegraf
+
+# Different tests
 import ping
+import iperf
+
 import host
 
 
@@ -26,28 +30,28 @@ def main():
     print('probe_name=' + probe_name.__str__())
 
     # does not exist - for testing purposes
-    host_x = host.Host('blackhole', '192.168.1.199')
+    # host_x = host.Host('blackhole', '192.168.1.199', False)
+    # hosts.append(host_x)
+
+    host_x = host.Host('j1900', '192.168.1.6', True)
     hosts.append(host_x)
 
-    host_x = host.Host('dsl_router', '192.168.1.1')
+    host_x = host.Host('dsl_router', '192.168.1.1', False)
     hosts.append(host_x)
 
-    host_x = host.Host('google_dns', '8.8.8.8')
+    host_x = host.Host('google_dns', '8.8.8.8', False)
     hosts.append(host_x)
 
-    host_x = host.Host('j1900', '192.168.1.6')
+    host_x = host.Host('netgear', '192.168.1.8', False)
     hosts.append(host_x)
 
-    host_x = host.Host('netgear', '192.168.1.8')
+    host_x = host.Host('pi', '192.168.1.12', True)
     hosts.append(host_x)
 
-    host_x = host.Host('pi', '192.168.1.12')
+    host_x = host.Host('web_server', '192.168.1.102', False)
     hosts.append(host_x)
 
-    host_x = host.Host('web_server', '192.168.1.102')
-    hosts.append(host_x)
-
-    host_x = host.Host('registry', '192.168.1.109')
+    host_x = host.Host('registry', '192.168.1.109', False)
     hosts.append(host_x)
 
     if stage == 'DEV':
@@ -58,6 +62,10 @@ def main():
     while True:
         try:
             for host_to_test in hosts:
+                if host_to_test.iperf_capable:
+                    jitter_measurements = iperf.measure_jitter_endpoint(host_to_test.hostname)
+                    throughput_measurements = iperf.measure_throughput_endpoint(host_to_test.hostname)
+
                 ping_measurements = ping.ping_endpoint(host_to_test.hostname, sudo)
 
                 # Construct the metric bundle
@@ -67,8 +75,14 @@ def main():
                     'packet_loss': ping_measurements['packet_loss'],
                     'rtt_min': ping_measurements['rtt_min'],
                     'rtt_avg': ping_measurements['rtt_avg'],
-                    'rtt_max': ping_measurements['rtt_max'],
+                    'rtt_max': ping_measurements['rtt_max']
                 }
+
+                # if destination is iperf-capable then add throughput metric
+                if host_to_test.iperf_capable:
+                    metrics['throughput_mbps'] = throughput_measurements['throughput_mbps']
+                    metrics['jitter'] = jitter_measurements['jitter']
+
                 pprint(metrics)
 
                 send_metrics_to_telegraf.send_metrics(telegraf_endpoint_host, metrics, verbose)
@@ -78,9 +92,8 @@ def main():
             time.sleep(poll_secs)
 
         except Exception as e:
-            print('Error : ' + e.__str__())
+            print('main() : Error : ' + e.__str__())
             print('sleeping...')
-            # beep.warning(num_beeps=2, sound=3)
             time.sleep(60)     # wait 1 mins
             continue
 

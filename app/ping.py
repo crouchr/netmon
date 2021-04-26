@@ -77,7 +77,6 @@ def ping_endpoint(dest_ip, sudo=False):
 
         ping_measurements = extract_ping_measurements(console_output)
 
-
         return ping_measurements
 
     except Exception as e:
