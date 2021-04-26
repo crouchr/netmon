@@ -13,7 +13,6 @@ import host
 
 
 def main():
-    hosts = []
     version = get_env.get_version()
     verbose = get_env.get_verbose()
     stage = get_env.get_stage()
@@ -29,30 +28,18 @@ def main():
     print('poll_secs=' + poll_secs.__str__())
     print('probe_name=' + probe_name.__str__())
 
-    # does not exist - for testing purposes
-    # host_x = host.Host('blackhole', '192.168.1.199', False)
-    # hosts.append(host_x)
+    destinations = host.Destinations(probe_name)
 
-    host_x = host.Host('j1900', '192.168.1.6', True)
-    hosts.append(host_x)
-
-    host_x = host.Host('dsl_router', '192.168.1.1', False)
-    hosts.append(host_x)
-
-    host_x = host.Host('google_dns', '8.8.8.8', False)
-    hosts.append(host_x)
-
-    host_x = host.Host('netgear', '192.168.1.8', False)
-    hosts.append(host_x)
-
-    host_x = host.Host('pi', '192.168.1.12', True)
-    hosts.append(host_x)
-
-    host_x = host.Host('web_server', '192.168.1.102', False)
-    hosts.append(host_x)
-
-    host_x = host.Host('registry', '192.168.1.109', False)
-    hosts.append(host_x)
+    destinations.add_host(host.Host('blackhole', '192.168.1.199', False))
+    destinations.add_host(host.Host('kube', '192.168.1.5', True))
+    destinations.add_host(host.Host('mr-dell', '192.168.1.180', True))
+    destinations.add_host(host.Host('j1900', '192.168.1.6', True))
+    destinations.add_host(host.Host('dsl_router', '192.168.1.1', False))
+    destinations.add_host(host.Host('google_dns', '8.8.8.8', False))
+    destinations.add_host(host.Host('netgear', '192.168.1.8', False))
+    destinations.add_host(host.Host('pi', '192.168.1.12', False))   # add iperf to startup script
+    destinations.add_host(host.Host('web_server', '192.168.1.102', False))
+    destinations.add_host(host.Host('registry', '192.168.1.109', False))
 
     if stage == 'DEV':
         sudo = True
@@ -61,7 +48,7 @@ def main():
 
     while True:
         try:
-            for host_to_test in hosts:
+            for host_to_test in destinations.hosts:
                 if host_to_test.iperf_capable:
                     jitter_measurements = iperf.measure_jitter_endpoint(host_to_test.hostname)
                     throughput_measurements = iperf.measure_throughput_endpoint(host_to_test.hostname)
