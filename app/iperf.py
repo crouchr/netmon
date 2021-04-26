@@ -69,7 +69,7 @@ def extract_jitter_measurements(console_output):
                     i = i + 1
                 break
 
-        jitter_measurements['jitter'] = jitter
+        jitter_measurements['jitter'] = jitter * 1000   # store in millisecs
 
         return jitter_measurements
 
