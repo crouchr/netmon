@@ -8,7 +8,7 @@ ENV PYTHONUNBUFFERED=1
 
 RUN apt -y update
 #RUN apt -y upgrade
-RUN apt -y install fping iperf
+RUN apt -y install fping iperf3
 
 # Install Python dependencies
 RUN pip3 install pipenv
