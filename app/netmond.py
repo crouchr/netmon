@@ -1,3 +1,4 @@
+# TODO add a arp-cache busting ping
 import time
 from pprint import pprint
 
