@@ -31,16 +31,16 @@ def main():
 
     destinations = host.Destinations(probe_name)
 
-    destinations.add_host(host.Host('blackhole', '192.168.1.199', False))
+    # destinations.add_host(host.Host('blackhole', '192.168.1.199', False))
     destinations.add_host(host.Host('kube', '192.168.1.5', True))
-    destinations.add_host(host.Host('mr-dell', '192.168.1.180', True))
+    # destinations.add_host(host.Host('mr-dell', '192.168.1.180', True))
     destinations.add_host(host.Host('j1900', '192.168.1.6', True))
-    destinations.add_host(host.Host('dsl_router', '192.168.1.1', False))
+    # destinations.add_host(host.Host('dsl_router', '192.168.1.1', False))
     destinations.add_host(host.Host('google_dns', '8.8.8.8', False))
-    destinations.add_host(host.Host('netgear', '192.168.1.8', False))
-    destinations.add_host(host.Host('pi', '192.168.1.12', True))    # add iperf to startup script
-    destinations.add_host(host.Host('web_server', '192.168.1.102', False))
-    destinations.add_host(host.Host('registry', '192.168.1.109', False))
+    # destinations.add_host(host.Host('netgear', '192.168.1.8', False))
+    # destinations.add_host(host.Host('pi', '192.168.1.12', True))    # add iperf to startup script
+    # destinations.add_host(host.Host('web_server', '192.168.1.102', False))
+    # destinations.add_host(host.Host('registry', '192.168.1.109', False))
 
     if stage == 'DEV':
         sudo = True
@@ -48,8 +48,13 @@ def main():
         sudo = False
 
     while True:
+        print('-------------------------')
+        start_time = time.time()
+        print(start_time)
+        print('start = ' + time.ctime())
         try:
             for host_to_test in destinations.hosts:
+
                 if host_to_test.iperf_capable:
                     jitter_measurements = iperf.measure_jitter_endpoint(host_to_test.hostname)
                     throughput_measurements = iperf.measure_throughput_endpoint(host_to_test.hostname)
@@ -74,16 +79,22 @@ def main():
                 pprint(metrics)
 
                 send_metrics_to_telegraf.send_metrics(telegraf_endpoint_host, metrics, verbose)
-                time.sleep(2)
-
-            # wait for next cycle of pinging hosts
-            time.sleep(poll_secs)
+                time.sleep(1)
 
         except Exception as e:
             print('main() : Error : ' + e.__str__())
             print('sleeping...')
             time.sleep(60)     # wait 1 mins
             continue
+
+        stop_time = time.time()
+        print('stop = ' + time.ctime())
+        time_used = stop_time - start_time
+        print('time_used=' + time_used.__str__())
+        time_to_wait_secs = poll_secs - time_used
+        print('time_to_wait_secs = ' + time_to_wait_secs.__str__())
+        print('waiting...')
+        time.sleep(time_to_wait_secs)
 
 
 if __name__ == '__main__':
